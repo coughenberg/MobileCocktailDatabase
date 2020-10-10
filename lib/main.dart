@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_flutter_project_prt2/drop_down/homemenu.dart' as Home;
+import 'package:MobileCocktailDatabase/drop_down/homemenu.dart' as Home;
 
 void main() => runApp(MyApp());
 
