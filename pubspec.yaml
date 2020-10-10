@@ -1,5 +1,5 @@
-name: new_flutter_project_prt2
-description: A new Flutter project.
+name: MobileCocktailDatabase
+description: Retrieves possible drinks to make based on the ingredients provided.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   flutter_multiselect: 0.0.1
   multiselect_formfield: ^0.1.4
+  http: ^0.12.0
 
 
   # The following adds the Cupertino Icons font to your application.
