@@ -1,14 +1,21 @@
 import 'dart:convert';
 
-import 'package:MobileCocktailDatabase/cockatail_db_apis/base_cocktaildb_info.dart';
 import 'package:http/http.dart' as http;
-import 'list_ingredients_interface.dart';
+
+import 'package:MobileCocktailDatabase/cockatail_db_apis/base_cocktaildb_info.dart';
+import 'package:MobileCocktailDatabase/cockatail_db_apis/get_list_of_ingredients/list_ingredients_service.dart';
+import 'package:MobileCocktailDatabase/cockatail_db_apis/get_list_of_ingredients/list_ingredients_interface.dart';
+import 'package:MobileCocktailDatabase/cockatail_db_apis/apiKey.dart';
+
+void main() {
+  IngredientList().getIngredientsListCall();
+}
 
 class IngredientList {
   // main is only here right now for debugging purposes, uncomment when testing backend service
-  // void main() {
-  //   getIngredientsListCall();
-  // }
+  void main() {
+    getIngredientsListCall();
+  }
 
   ///The call to get the list of ingredients
   ///
