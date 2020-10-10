@@ -21,11 +21,8 @@ class IngredientList {
   ///
   ///@returns Future<List<Ingredient>> from the class list_ingredients_interface
   Future<List<Ingredient>> getIngredientsListCall() async {
-    print('hello');
     var url = '$BASE_URL/$VERSION/$API_KEY/list.php?i=list';
-    print(url);
     var responseString = await http.get(url);
-    print('hello');
     Map<String, dynamic> response = jsonDecode(responseString.body);
     return IngredientResponse.fromJson(response).ingredients;
   }
