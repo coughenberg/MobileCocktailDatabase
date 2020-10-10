@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+  flutter_multiselect: 0.0.1
+  multiselect_formfield: ^0.1.4
   http: ^0.12.0
 
 
