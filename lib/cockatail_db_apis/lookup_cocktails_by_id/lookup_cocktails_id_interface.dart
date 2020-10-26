@@ -19,7 +19,6 @@ class CocktailsByIDResponse {
 
   /// Extrapolate data from json map to CocktailsByIDResponse Object
   CocktailsByIDResponse.fromJson(Map<String, dynamic> json) {
-    print(json['drinks'][0]['strDrink']);
     this.drinkName = json['drinks'][0]['strDrink'].toString();
     this.drinkId = json['drinks'][0]['idDrink'].toString();
     this.category = json['drinks'][0]['strCategory'].toString();
