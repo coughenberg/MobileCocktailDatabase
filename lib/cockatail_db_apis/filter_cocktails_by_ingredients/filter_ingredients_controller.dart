@@ -8,10 +8,10 @@ import 'package:MobileCocktailDatabase/cockatail_db_apis/lookup_cocktails_by_id/
 
 // main is only here right now for debugging purposes,
 // uncomment when testing backend service
-void main() {
-  FilterCocktailsByIngredientsController()
-      .filterIngredientsBloc(['tequila', 'salt', 'lemonade', 'vodka']);
-}
+// void main() {
+//   FilterCocktailsByIngredientsController()
+//       .filterIngredientsBloc(['tequila', 'salt', 'lemonade', 'vodka']);
+// }
 
 /// Business logic class for filtering cocktails by given ingredients
 class FilterCocktailsByIngredientsController {
@@ -48,6 +48,8 @@ class FilterCocktailsByIngredientsController {
   }
 
   /// Finds the total amount of commas in a given ingredientString
+  ///
+  /// @param ingredientString - string of comma separated ingredients
   /// @returns total amount of commas found
   int getAmountOfCommas(String ingredientString) {
     int index = 0;
@@ -64,8 +66,8 @@ class FilterCocktailsByIngredientsController {
 
   /// Allows for minimal amount of calls to happen to the api
   ///
-  /// @param maxListLength will later be adjusted to be used with pagination
-  /// @returns Future void value, so the previous call can wait for this one
+  /// @param maxListLength - A sorted list with the most ingredients first
+  /// @returns Future - void value so the previous call can wait for this one
   Future condenseCallsToFilterIngredients({maxListLength = 10}) async {
     while (this.cocktailIDs.length <= maxListLength &&
         this.ingredientPermutations != null &&
