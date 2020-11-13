@@ -38,7 +38,6 @@ class FilterCocktailsByIngredientsController {
     this
         .ingredientPermutations
         .sort((a, b) => getAmountOfCommas(b).compareTo(getAmountOfCommas(a)));
-    print(this.ingredientPermutations);
 
     await condenseCallsToFilterIngredients();
     List<CocktailsByIDResponse> cocktailInformation =
