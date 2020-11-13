@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'package:powerset/powerset.dart';
+
 import 'package:MobileCocktailDatabase/cockatail_db_apis/filter_cocktails_by_ingredients/filter_ingredients_interface.dart';
 import 'package:MobileCocktailDatabase/cockatail_db_apis/filter_cocktails_by_ingredients/filter_ingredients_service.dart';
 import 'package:MobileCocktailDatabase/cockatail_db_apis/lookup_cocktails_by_id/lookup_cocktails_id_controller.dart';
@@ -26,14 +29,16 @@ class FilterCocktailsByIngredientsController {
   /// @returns Future<List<CocktailsByIDResponse>> List of cocktails
   Future<List<CocktailsByIDResponse>> filterIngredientsBloc(
       List<String> ingredients) async {
-    for (int i = 0; i < ingredients.length; i++) {
-      List<String> temp = [ingredients[i]];
-      for (int j = i + 1; j < ingredients.length; j++) {
-        temp.add(ingredients[j]);
-        // Add the elements with the most amount of ingredients to the end HERE.
-        this.ingredientPermutations.add(temp.join(','));
-      }
-    }
+    Iterable<List<String>> ingredientsPowerSet = powerset(ingredients);
+
+    ingredientsPowerSet.forEach((ingredientCombination) {
+      this.ingredientPermutations.add(ingredientCombination.join(','));
+    });
+    this.ingredientPermutations.removeLast();
+    this
+        .ingredientPermutations
+        .sort((a, b) => getAmountOfCommas(b).compareTo(getAmountOfCommas(a)));
+
     await condenseCallsToFilterIngredients();
     List<CocktailsByIDResponse> cocktailInformation =
         await LookupCocktailInformationByIDsController()
@@ -41,23 +46,37 @@ class FilterCocktailsByIngredientsController {
     return cocktailInformation;
   }
 
+  /// Finds the total amount of commas in a given ingredientString
+  ///
+  /// @param ingredientString - string of comma separated ingredients
+  /// @returns total amount of commas found
+  int getAmountOfCommas(String ingredientString) {
+    int index = 0;
+    int total = 0;
+    while (index >= 0 && index < ingredientString.length - 1) {
+      index = ingredientString.indexOf(',', index);
+      if (index != -1) {
+        total++;
+        index = index + 1;
+      }
+    }
+    return total;
+  }
+
   /// Allows for minimal amount of calls to happen to the api
   ///
-  /// @param maxListLength will later be adjusted to be used with pagination
-  /// @returns Future void value, so the previous call can wait for this one
+  /// @param maxListLength - A sorted list with the most ingredients first
+  /// @returns Future - void value so the previous call can wait for this one
   Future condenseCallsToFilterIngredients({maxListLength = 10}) async {
-    bool check = true;
-    while (check &&
+    while (this.cocktailIDs.length <= maxListLength &&
         this.ingredientPermutations != null &&
         this.ingredientPermutations.length > 0) {
-      var cocktailResponse = await FilterCocktailsByIngredientsService()
-          .filterIngredientsServicePost(
-              this.ingredientPermutations.removeLast());
+      List<CocktailsByIngredient> cocktailResponse =
+          await FilterCocktailsByIngredientsService()
+              .filterIngredientsServicePost(
+                  this.ingredientPermutations.removeAt(0));
       if (cocktailResponse != null) {
         cocktailResponse.forEach((cocktail) => this.cocktailIDs.add(cocktail));
-        if (cocktailResponse.length > maxListLength) {
-          check = false;
-        }
       }
     }
   }
